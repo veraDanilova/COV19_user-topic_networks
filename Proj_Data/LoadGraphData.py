@@ -77,8 +77,8 @@ class GraphType2D:
             return sent
       
         if self.net == 'Twi':
-            
-            dataset = pd.read_csv(self.root+"COR_TWI_preprocessed_below.csv", engine = 'python', index_col = 0)
+		
+            dataset = pd.read_csv(self.root+"COR_TWI_resized.csv", engine = 'python', index_col = 0)
             dataset['unigramsC'] = dataset['unigramsC'].apply(lambda x: DFvalueToList(x))
             
             def makeMask(start_date, end_date):
@@ -95,7 +95,7 @@ class GraphType2D:
 
         elif self.net == 'LJ':
           
-            dataset = pd.read_csv(self.root+'data_cutbelowabove.csv', engine = 'python')
+            dataset = pd.read_csv(self.root+'COR_LJ_resized.csv', engine = 'python')
             dataset['unigramsC'] = dataset['unigramsC'].apply(lambda x: DFvalueToList(x))
 
             def makeMask(start_date, end_date):
