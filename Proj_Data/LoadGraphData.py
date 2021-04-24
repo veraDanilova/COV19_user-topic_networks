@@ -282,28 +282,24 @@ class GraphType2D:
         for e in G.edges(data = True):
             x = [pos[e[0]][0],pos[e[1]][0], None]
             y = [pos[e[0]][1],pos[e[1]][1], None]
-            edge_list.append(dict(type = 'scatter', 
-                                  x = x, y = y,
-                                  mode = 'lines',
-                                  line = dict(width = e[2]['textratio'], color = e[2]['col'])))
-			#transparent nodes
+            edge_list.append(dict(type = 'scatter', x = x, y = y, mode = 'lines', line = dict(width = e[2]['textratio'], color = e[2]['col'])))
+            #transparent nodes
+            x0, y0 = G.nodes[e[0]]['pos']
+            x1, y1 = G.nodes[e[1]]['pos']
 
-			x0, y0 = G.nodes[e[0]]['pos']
-			x1, y1 = G.nodes[e[1]]['pos']
+            d = math.sqrt((x1-x0)**2 + (y1 - y0)**2) #distance
+            r = (d*9.3/10)/ d #segment ratio
 
-			d = math.sqrt((x1-x0)**2 + (y1 - y0)**2) #distance
-			r = (d*9.3/10)/ d #segment ratio
+            Transparent_x = r * x1 + (1 - r) * x0 #find point that divides the segment
+            Transparent_y = r * y1 + (1 - r) * y0 #into the ratio (1-r):r
 
-			Transparent_x = r * x1 + (1 - r) * x0 #find point that divides the segment
-			Transparent_y = r * y1 + (1 - r) * y0 #into the ratio (1-r):r
+            Transparent_hover = f'Ratio of texts to all week texts - {e[2]["textratio"]*2} %, number of texts - {e[2]["sumTexts"]}'
+            Transparent_x_list.append(Transparent_x)
+            Transparent_y_list.append(Transparent_y)
+            Transparent_hover_list.append(Transparent_hover)
 
-			Transparent_hover = f'Ratio of texts to all week texts - {e[2]["textratio"]*2} %, number of texts - {e[2]["sumTexts"]}'
-			Transparent_x_list.append(Transparent_x)
-			Transparent_y_list.append(Transparent_y)
-			Transparent_hover_list.append(Transparent_hover)
-
-			middle_nodes_list.append(dict(type='scatter', x=Transparent_x_list, y=Transparent_y_list,hovertext = Transparent_hover_list, hoverinfo = 'text', mode='markers',marker=go.Marker(
-				opacity=0.4, color = 'aliceblue')))
+            middle_nodes_list.append(dict(type='scatter', x=Transparent_x_list, y=Transparent_y_list,hovertext = Transparent_hover_list, hoverinfo = 'text', mode='markers',marker=go.Marker(
+            opacity=0.4, color = 'aliceblue')))
 
 
         """TOPIC NODES"""
