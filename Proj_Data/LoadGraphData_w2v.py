@@ -295,7 +295,7 @@ class GraphType2D_w2v:
             Transparent_x = r * x1 + (1 - r) * x0 #find point that divides the segment
             Transparent_y = r * y1 + (1 - r) * y0 #into the ratio (1-r):r
 
-            Transparent_hover = f'Ratio of texts to all week texts - {e[2]["textratio"]*2} %, number of texts - {e[2]["sumTexts"]}'
+            Transparent_hover = f'Contributing group: {e[0]}-topic users.Ratio of texts to all week texts - {e[2]["textratio"]*2} %, number of texts - {e[2]["sumTexts"]}'
             Transparent_x_list.append(Transparent_x)
             Transparent_y_list.append(Transparent_y)
             Transparent_hover_list.append(Transparent_hover)
@@ -338,16 +338,35 @@ class GraphType2D_w2v:
             for disp in range(1,5):
                 if len(W_one_max[W_one_max['topic'] == node][W_one_max['dispersion'] == disp]['n_accs'].values) > 0:
                     value = W_one_max[W_one_max['topic'] == node][W_one_max['dispersion'] == disp]['n_accs'].values[0]
+                    all_active = sum(W_one_max['n_accs'].values)
+                    value_perc = round(value/all_active * 100, 1)
                 else:
                     value = 0
-                dispfrom1to4.append(value)
+                    value_perc = 0
+                desc_tp = (value, value_perc)
+                dispfrom1to4.append(desc_tp)
             description.append(f"<b>{node}</b>"
                                "<br><br>Per n-topic accounts: " +
-                               "<br> 1-topic accs:" + str(dispfrom1to4[0]) +
-                               "<br> 2-topic accs:" + str(dispfrom1to4[1]) +
-                               "<br> 3-topic accs:" + str(dispfrom1to4[2]) +
-                               "<br> 4-topic accs:" + str(dispfrom1to4[3]) +
-                               "<br> 5>=topic accs:" + str(sum(W_one_max[W_one_max['topic'] == node][W_one_max['dispersion'] >= 5]['n_accs'].values)))
+                               "<br> 1-topic accs:" + str(dispfrom1to4[0][0]) + " , " + str(dispfrom1to4[0][1]) + '%' +
+                               "<br> 2-topic accs:" + str(dispfrom1to4[1][0]) + " , " + str(dispfrom1to4[1][1]) + '%' +
+                               "<br> 3-topic accs:" + str(dispfrom1to4[2][0]) + " , " + str(dispfrom1to4[2][1]) + '%' +
+                               "<br> 4-topic accs:" + str(dispfrom1to4[3][0]) + " , " + str(dispfrom1to4[3][1]) + '%' +
+                               "<br> 5>=topic accs:" + str(sum(W_one_max[W_one_max['topic'] == node][W_one_max['dispersion'] >= 5]['n_accs'].values)) + " , " + 
+                               str(round(sum(W_one_max[W_one_max['topic'] == node][W_one_max['dispersion'] >= 5]['n_accs'].values) / sum(W_one_max['n_accs'].values) * 100,1))+'%')
+
+            # for disp in range(1,5):
+            #     if len(W_one_max[W_one_max['topic'] == node][W_one_max['dispersion'] == disp]['n_accs'].values) > 0:
+            #         value = W_one_max[W_one_max['topic'] == node][W_one_max['dispersion'] == disp]['n_accs'].values[0]
+            #     else:
+            #         value = 0
+            #     dispfrom1to4.append(value)
+            # description.append(f"<b>{node}</b>"
+            #                    "<br><br>Per n-topic accounts: " +
+            #                    "<br> 1-topic accs:" + str(dispfrom1to4[0]) +
+            #                    "<br> 2-topic accs:" + str(dispfrom1to4[1]) +
+            #                    "<br> 3-topic accs:" + str(dispfrom1to4[2]) +
+            #                    "<br> 4-topic accs:" + str(dispfrom1to4[3]) +
+            #                    "<br> 5>=topic accs:" + str(sum(W_one_max[W_one_max['topic'] == node][W_one_max['dispersion'] >= 5]['n_accs'].values)))
         # =============================================================================
         topic_node_trace = go.Scatter(x=topic_node_x, y=topic_node_y, mode='markers', hoverinfo='text',hovertext = description, marker=dict(
         size = topic_node_size,
@@ -381,7 +400,8 @@ class GraphType2D_w2v:
         # [f"<b>{index}) {node}</b>"
         description_other = [f"<b>{node}-topic accounts:</b>"
         "<br><br> Number of accounts: " + str(sum(W_one_max[W_one_max['dispersion'] == node]['n_accs'].values)) +
-        "<br><br> Ratio to all accounts: " + str(W_one_max[W_one_max['dispersion'] == node]['DispAccratio'].values[0])+'%'
+        "<br><br> Ratio to all accounts: " + str(W_one_max[W_one_max['dispersion'] == node]['DispAccratio'].values[0])+'%'+
+        "<br><br> Number of topics covered: " + str(W_one_max[W_one_max['dispersion'] == node]['topic'].nunique())
         for index, node in enumerate(other_node_labels)]
         # =============================================================================
         
