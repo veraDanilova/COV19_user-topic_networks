@@ -424,10 +424,14 @@ class GraphType2D_w2v:
 
         fig = go.Figure(data=edge_list+middle_nodes_list+[topic_node_trace, other_node_trace],layout=go.Layout(
         autosize=False,
-        width=1500,
-        height=1000,
+        width=1000,
+        height=900,
         paper_bgcolor="LightSteelBlue",
-        #                             plot_bgcolor = "aliceblue",
+        plot_bgcolor = "darkslategray",
+        # width=1500,
+        # height=1000,
+        # paper_bgcolor="LightSteelBlue",
+        # #                             plot_bgcolor = "aliceblue",
         title='<br>',
         titlefont_size=16,
         showlegend=False,
